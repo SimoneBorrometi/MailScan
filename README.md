@@ -5,6 +5,7 @@ Progetto per Technologies for Advanced Programming
 ```
 <<<<<<< HEAD
 $ docker network create --subnet=10.0.100.0/24 testing
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 $ docker network create --subnet=10.0.100.0/24 testing
@@ -12,6 +13,11 @@ $ docker network create --subnet=10.0.100.0/24 testing
 $ docker network create --subnet=10.1.100.0/24 testing
 >>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
 >>>>>>> f089156 (Updated README, minor change to dockerfile)
+=======
+
+$ docker network create --subnet=10.0.100.0/24 testing
+$ docker network create --subnet=10.1.100.0/24 testing
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
 ```
 
 ### Mailserver testing
@@ -34,15 +40,21 @@ $ docker logs my_stalwart
 ```
 ```
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
 $ ./stalwart-cli -u https://localhost domain create 'example.org'
 
 $ ./stalwart-cli -u https://localhost account create -d "John Snow" -i false -a "john@example.org" john 123456
 
+<<<<<<< HEAD
 >>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
 >>>>>>> f089156 (Updated README, minor change to dockerfile)
+=======
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
 $ ./stalwart-cli -u https://localhost import messages -f mbox john /path/to/file.mbox
 ```
 ### Logstash
@@ -50,6 +62,7 @@ $ ./stalwart-cli -u https://localhost import messages -f mbox john /path/to/file
 $ docker build logstash/ --tag logstash:tappro
 $ docker run -it --network testing --rm  --name logstap logstash:tappro
 <<<<<<< HEAD
+<<<<<<< HEAD
 ```
 =======
 <<<<<<< HEAD
@@ -58,3 +71,6 @@ $ docker run -it --network testing --rm  --name logstap logstash:tappro
 ```
 >>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
 >>>>>>> f089156 (Updated README, minor change to dockerfile)
+=======
+```
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
