@@ -3,7 +3,15 @@ Progetto per Technologies for Advanced Programming
 # Setup
 
 ```
+<<<<<<< HEAD
 $ docker network create --subnet=10.0.100.0/24 testing
+=======
+<<<<<<< HEAD
+$ docker network create --subnet=10.0.100.0/24 testing
+=======
+$ docker network create --subnet=10.1.100.0/24 testing
+>>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
+>>>>>>> f089156 (Updated README, minor change to dockerfile)
 ```
 
 ### Mailserver testing
@@ -25,10 +33,28 @@ Ottieni i dati di accesso
 $ docker logs my_stalwart
 ```
 ```
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+$ ./stalwart-cli -u https://localhost domain create 'example.org'
+
+$ ./stalwart-cli -u https://localhost account create -d "John Snow" -i false -a "john@example.org" john 123456
+
+>>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
+>>>>>>> f089156 (Updated README, minor change to dockerfile)
 $ ./stalwart-cli -u https://localhost import messages -f mbox john /path/to/file.mbox
 ```
 ### Logstash
 ```
 $ docker build logstash/ --tag logstash:tappro
 $ docker run -it --network testing --rm  --name logstap logstash:tappro
+<<<<<<< HEAD
 ```
+=======
+<<<<<<< HEAD
+```
+=======
+```
+>>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
+>>>>>>> f089156 (Updated README, minor change to dockerfile)
