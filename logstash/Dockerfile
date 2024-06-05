@@ -1,6 +1,9 @@
+# Logstash > 8.10 rompe la funzionallità del plugin imap
 FROM docker.elastic.co/logstash/logstash:8.9.2
 
 RUN logstash-plugin install logstash-input-imap
+
+# Potrebbero non essere necessari 
 USER root
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install netbase
