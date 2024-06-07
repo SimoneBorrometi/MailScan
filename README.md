@@ -3,7 +3,25 @@ Progetto per Technologies for Advanced Programming
 # Setup
 
 ```
+<<<<<<< HEAD
 $ docker network create --subnet=10.1.100.0/24 testing
+=======
+<<<<<<< HEAD
+$ docker network create --subnet=10.0.100.0/24 testing
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+$ docker network create --subnet=10.0.100.0/24 testing
+=======
+$ docker network create --subnet=10.1.100.0/24 testing
+>>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
+>>>>>>> f089156 (Updated README, minor change to dockerfile)
+=======
+
+$ docker network create --subnet=10.0.100.0/24 testing
+$ docker network create --subnet=10.1.100.0/24 testing
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
+>>>>>>> 80bb1f2fdf7d180c6219f6c33e2ac5f3e68f5dbb
 ```
 
 ### Mailserver testing
@@ -26,14 +44,48 @@ $ docker logs my_stalwart
 ```
 Crea dominio e utente
 ```
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
+>>>>>>> 80bb1f2fdf7d180c6219f6c33e2ac5f3e68f5dbb
 $ ./stalwart-cli -u https://localhost domain create 'example.org'
 
 $ ./stalwart-cli -u https://localhost account create -d "John Snow" -i false -a "john@example.org" john 123456
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
+>>>>>>> f089156 (Updated README, minor change to dockerfile)
+=======
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
+>>>>>>> 80bb1f2fdf7d180c6219f6c33e2ac5f3e68f5dbb
 $ ./stalwart-cli -u https://localhost import messages -f mbox john /path/to/file.mbox
 ```
 ### Logstash
 ```
 $ docker build logstash/ --tag logstash:tappro
 $ docker run -it --network testing --rm  --name logstap logstash:tappro
+<<<<<<< HEAD
 ```
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+```
+=======
+<<<<<<< HEAD
+```
+=======
+```
+>>>>>>> 3b52ba9 (Updated README, minor change to dockerfile)
+>>>>>>> f089156 (Updated README, minor change to dockerfile)
+=======
+```
+>>>>>>> 8b59dc4 (Updated README, minor change to dockerfile)
+>>>>>>> 80bb1f2fdf7d180c6219f6c33e2ac5f3e68f5dbb
