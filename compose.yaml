@@ -26,6 +26,13 @@ services:
     networks:
       net:
         ipv4_address: 172.16.0.6
+    stdin_open: true
+    tty: true
+    environment:
+      MAIL_USR_PSW: /run/secrets/mail_usr_psw
+    secrets:
+      - mail_usr_psw
+
 
 networks:
   net:
@@ -36,3 +43,7 @@ networks:
         #          aux_addresses:
             #      stalwart: 172.16.1.5
             #    logstash: 172.16.1.6
+
+secrets:
+  mail_usr_psw:
+    file: ./secrets/pswd

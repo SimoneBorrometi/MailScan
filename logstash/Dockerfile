@@ -3,6 +3,8 @@ FROM docker.elastic.co/logstash/logstash:8.9.2
 
 RUN logstash-plugin install logstash-input-imap
 
+ENV TZ=Europe/Rome
+
 # Potrebbero non essere necessari 
 USER root
 RUN apt-get update && apt-get upgrade -y
