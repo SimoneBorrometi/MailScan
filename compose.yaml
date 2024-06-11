@@ -1,0 +1,38 @@
+name: mailscan
+
+services:
+  stalwart:
+    image: stalwartlabs/mail-server:latest
+    ports: 
+      - "443:443"
+      - "8080:8080"
+      - "25:25"
+      - "587:587" 
+      - "465:465"
+      - "143:143" 
+      - "993:993" 
+      - "4190:4190"
+    networks:
+      net:
+        ipv4_address: 172.16.0.5
+    volumes:
+      - type: bind
+        source: ./stalwart-mail
+        target: /opt/stalwart-mail
+
+  logstash:
+#    image: docker.elastic.co/logstash/logstash:8.9.2
+    build: ./logstash
+    networks:
+      net:
+        ipv4_address: 172.16.0.6
+
+networks:
+  net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/16
+        #          aux_addresses:
+            #      stalwart: 172.16.1.5
+            #    logstash: 172.16.1.6
