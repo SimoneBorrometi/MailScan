@@ -3,7 +3,7 @@ FROM docker.elastic.co/logstash/logstash:8.9.2
 
 RUN logstash-plugin install logstash-input-imap
 
-ENV TZ=Europe/Rome
+# ENV TZ=Europe/Rome
 
 # Potrebbero non essere necessari 
 USER root
