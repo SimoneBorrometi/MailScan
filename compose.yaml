@@ -54,30 +54,57 @@ services:
       net:
         ipv4_address: 172.16.0.7
 
-  kafka-reader:
-    image: apache/kafka:latest
-    command: /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server broker:9092 --topic mails
-    depends_on:
-      kafka-topics:
-        condition: service_completed_successfully
-    networks:
-      net:
-        ipv4_address: 172.16.0.8
+#  kafka-reader:
+#    image: apache/kafka:latest
+#    command: /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server broker:9092 --topic mails
+#    depends_on:
+#      kafka-topics:
+#        condition: service_completed_successfully
+#    networks:
+#      net:
+#        ipv4_address: 172.16.0.8
 
   logstash:
     build: ./logstash
     networks:
       net:
         ipv4_address: 172.16.0.9
-    # stdin_open: true
-    # tty: true
+    stdin_open: true
+    tty: true
     environment:
-      MAIL_USR_PSW: /run/secrets/mail_usr_psw
+      MAIL_USR_PSW_FILE: /run/secrets/mail_usr_psw
+      LOGSTASH_KEYSTORE_FILE: /run/secrets/logstash_keystore_pass
     secrets:
       - mail_usr_psw
+      - logstash_keystore_pass
     depends_on:
       kafka-topics:
         condition: service_completed_successfully
+
+  # flink-jobmanager:
+  #   image: flink:latest
+  #   ports:
+  #     - 8081:8081
+  #   networks:
+  #     - net
+  #   environment:
+  #     FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
+  #   command: standalone-job --job-classname org.dmi.mailscanner.DataStreamJob
+  #   volumes:
+  #     - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlib
+
+  # flink-taskmanager:
+  #   image: flink:latest
+  #   networks:
+  #     - net
+  #   environment:
+  #     FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
+  #   depends_on:
+  #     - flink-jobmanager
+  #   command: taskmanager
+  #   volumes:
+  #     - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlib
+
 
   redpanda:
     image: docker.redpanda.com/redpandadata/console:latest
@@ -97,4 +124,6 @@ networks:
 
 secrets:
   mail_usr_psw:
-    file: ./secrets/pswd
+    file: ./secrets/user-password
+  logstash_keystore_pass:
+    file: ./secrets/logstash-keystore
