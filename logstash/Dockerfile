@@ -1,8 +1,7 @@
 # Logstash > 8.10 rompe la funzionallità del plugin imap
 FROM docker.elastic.co/logstash/logstash:8.9.2
 
-RUN logstash-plugin install logstash-input-imap
-
+RUN logstash-plugin install logstash-input-imap 
 # ENV TZ=Europe/Rome
 
 # Potrebbero non essere necessari 

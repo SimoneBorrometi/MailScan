@@ -99,8 +99,7 @@ services:
     networks:
       - net
     environment:
-      FLINK_PROPERTIES: |-
-          jobmanager.rpc.address: jobmanager
+      FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
     depends_on:
       - flink-jobmanager
     command: taskmanager
