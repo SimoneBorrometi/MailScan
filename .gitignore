@@ -2,4 +2,5 @@ testing/
 stalwart-mail/
 secrets/
 flink/mailscanner/target/
+flink/mailscanner/bin/
 .vscode/

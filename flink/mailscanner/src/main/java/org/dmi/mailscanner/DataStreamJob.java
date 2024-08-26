@@ -18,7 +18,13 @@
 
  package org.dmi.mailscanner;
 
+import java.util.List;
+
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
+import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.formats.json.JsonDeserializationSchema;
@@ -70,9 +76,26 @@ public class DataStreamJob {
 
 		DataStream<Email> emails = env.fromSource(source, WatermarkStrategy.noWatermarks(), "kafka-input");
 
+        KafkaSink<String> kafkaSink = KafkaSink.<String>builder()
+            .setBootstrapServers(bootstrapServer)
+            .setRecordSerializer(KafkaRecordSerializationSchema.builder()
+                .setTopic("sentiment")
+                .setValueSerializationSchema(new SimpleStringSchema())
+                .build()
+            )
+            .build();
 
-		emails.print().name("print-sink");
+
+		// emails.print().name("print-kafkaSink");
     
+        DataStream<Tuple2<Email, Tuple2<List<Integer>, List<String>>>> sentiment = emails.map(new AnalyzeSentiment());
+        DataStream<String> sentimentPrint = sentiment.map((tuple2) -> {
+            String out = "";
+            out+= tuple2.f0.toString();
+            out+= tuple2.f1.toString();
+            return out;
+        });
+        sentimentPrint.sinkTo(kafkaSink);
 
 		env.execute("Flink Java API Skeleton");
 	}

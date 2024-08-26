@@ -47,7 +47,9 @@ services:
 
   kafka-topics:
     image: apache/kafka:latest
-    command: bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic mails --bootstrap-server broker:9092"
+    command: >
+        bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic mails --bootstrap-server broker:9092 
+        && /opt/kafka/bin/kafka-topics.sh --create --topic sentiment --bootstrap-server broker:9092"
     depends_on: 
       - broker
     networks:
