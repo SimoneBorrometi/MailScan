@@ -49,7 +49,7 @@ services:
     image: apache/kafka:latest
     command: >
         bash -c "/opt/kafka/bin/kafka-topics.sh --create --topic mails --bootstrap-server broker:9092 
-        && /opt/kafka/bin/kafka-topics.sh --create --topic sentiment --bootstrap-server broker:9092"
+        && /opt/kafka/bin/kafka-topics.sh --create --topic summary --bootstrap-server broker:9092"
     depends_on: 
       - broker
     networks:
@@ -83,31 +83,37 @@ services:
       kafka-topics:
         condition: service_completed_successfully
 
-  flink-jobmanager:
-    image: flink:latest
+  # flink-jobmanager:
+  #   image: flink:latest
+  #   ports:
+  #     - 8081:8081
+  #   networks:
+  #     - net
+  #   hostname: jobmanager
+  #   environment:
+  #     FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
+  #   command: standalone-job --job-classname org.dmi.mailscanner.DataStreamJob
+  #   volumes:
+  #     - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlib
+
+  # flink-taskmanager:
+  #   image: flink:latest
+  #   networks:
+  #     - net
+  #   environment:
+  #     FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
+  #   depends_on:
+  #     - flink-jobmanager
+  #   command: taskmanager
+  #   volumes:
+  #     - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlibs
+
+  pyflink:
+    build: ./flink/pyflink
+    networks:
+      - net
     ports:
       - 8081:8081
-    networks:
-      - net
-    hostname: jobmanager
-    environment:
-      FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
-    command: standalone-job --job-classname org.dmi.mailscanner.DataStreamJob
-    volumes:
-      - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlib
-
-  flink-taskmanager:
-    image: flink:latest
-    networks:
-      - net
-    environment:
-      FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
-    depends_on:
-      - flink-jobmanager
-    command: taskmanager
-    volumes:
-      - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlib
-
 
   redpanda:
     image: docker.redpanda.com/redpandadata/console:latest

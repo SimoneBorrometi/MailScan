@@ -22,3 +22,6 @@ $ stalwart-cli -u https://localhost account create -d "John Snow" -i false -a "j
 
 $ stalwart-cli -u https://localhost import messages -f mbox john /path/to/file.mbox
 ```
+
+### Flink setup
+Scarica il [connettore kafka ](https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-kafka/1.17.2/flink-sql-connector-kafka-1.17.2.jar) e spostalo su flink/pyflink/
