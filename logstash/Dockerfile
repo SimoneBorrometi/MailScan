@@ -13,7 +13,7 @@ USER logstash
 # Rimuovi la configurazione di default
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 # Importa i file di config
-COPY pipeline/imap.conf /usr/share/logstash/pipeline/imap.conf
+COPY pipeline/* /usr/share/logstash/pipeline/
 COPY config/ /usr/share/logstash/config/
 
 # L'entrypoint configura il keystore e lancia logstash

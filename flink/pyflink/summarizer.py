@@ -6,6 +6,9 @@ from pyflink.datastream.formats.json import JsonRowDeserializationSchema
 from pyflink.datastream.formats.json import JsonRowSerializationSchema
 from pyflink.datastream.functions import MapFunction
 from pyflink.common import Row
+from pyflink.datastream.connectors.elasticsearch import Elasticsearch7SinkBuilder, ElasticsearchEmitter
+
+
 
 
 import spacy
@@ -45,7 +48,8 @@ class SummaryMap(MapFunction):
 def setup():
     env = StreamExecutionEnvironment.get_execution_environment()
     # the sql connector for kafka is used here as it's a fat jar and could avoid dependency issues
-    env.add_jars("file:///flink-sql-connector-kafka-1.17.2.jar")
+    env.add_jars("file:///flink-sql-connector-kafka-1.17.2.jar",
+                 "file:///flink-sql-connector-elasticsearch7-3.0.1-1.17.jar")
 
     deserialization_schema = JsonRowDeserializationSchema.builder() \
         .type_info(type_info=Types.ROW_NAMED(field_names=["to","from","message"],
@@ -75,6 +79,16 @@ def setup():
         topic='summary',
         serialization_schema=serialization_schema,
         producer_config={'bootstrap.servers': 'broker:9092', 'group.id': 'test_group'})
+    
+    #ELASTIC sink
+
+    # es7_sink = Elasticsearch7SinkBuilder() \
+    #     .set_emitter(ElasticsearchEmitter.dynamic_index('name', 'id')) \
+    #     .set_hosts(['es01:9200']) \
+    #     .build()
+
+    # summaries.sink_to(es7_sink).name('es7 dynamic index sink')
+
 
     summaries.add_sink(kafka_producer)
     summaries.print()

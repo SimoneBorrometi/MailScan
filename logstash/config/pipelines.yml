@@ -1,0 +1,6 @@
+- pipeline.id: imap
+  path.config: "/usr/share/logstash/pipeline/imap.conf"
+  # pipeline.workers: 1
+- pipeline.id: elastic
+  path.config: "/usr/share/logstash/pipeline/elastic.conf"
+  # queue.type: persisted

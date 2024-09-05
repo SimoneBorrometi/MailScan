@@ -114,6 +114,36 @@ services:
       - net
     ports:
       - 8081:8081
+    depends_on:
+      - elasticsearch
+    
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.23 
+    hostname: "es01"
+    networks:
+      - net
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.23
+    networks:
+      - net
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    # environment:
+      # - ELASTICSEARCH_HOSTS=http://es01:9200
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+
+    # volumes:
+      # - .kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
 
   redpanda:
     image: docker.redpanda.com/redpandadata/console:latest
