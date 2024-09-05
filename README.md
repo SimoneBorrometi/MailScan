@@ -12,6 +12,8 @@ Ottieni i dati di accesso
 $ docker logs my_stalwart
 ```
 #### Only once
+Set hostname to 'localhost' via web UI
+
 Ottieni [stalwart-cli](https://github.com/stalwartlabs/mail-server/releases/tag/v0.8.1)
 
 Crea dominio e utente 

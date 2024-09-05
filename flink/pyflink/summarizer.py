@@ -12,6 +12,7 @@ from pyflink.datastream.connectors.elasticsearch import Elasticsearch7SinkBuilde
 
 
 import spacy
+from spacytextblob.spacytextblob import SpacyTextBlob
 import pytextrank
 import os
 import re
@@ -21,6 +22,8 @@ from bs4 import BeautifulSoup
 
 nlp = spacy.load("it_core_news_md")
 nlp.add_pipe("textrank")
+nlp.add_pipe('spacytextblob')
+
 
 class SummaryMap(MapFunction):
     def clean_text(text):
@@ -32,14 +35,18 @@ class SummaryMap(MapFunction):
     def map(self, value:Row):
         _to = value['to']
         _from = value['from']
+        _time_sent= value['time_sent']
         _message = SummaryMap.clean_text(value['message'])
         _summary = ""
 
         doc = nlp(_message)
-        for sent in doc._.textrank.summary(limit_phrases=5, limit_sentences=5):
+
+        _polarity = doc._.blob.polarity                            #
+        _subjectivity =  doc._.blob.subjectivity  
+        for sent in doc._.textrank.summary(limit_phrases=2, limit_sentences=2):
             # print(sent)
             _summary += sent.text
-        _enrichedMail = Row(_to,_from,_message,_summary)
+        _enrichedMail = Row(_to,_from,_message,_time_sent,_summary,_polarity,_subjectivity)
         return _enrichedMail
 
 
@@ -52,8 +59,8 @@ def setup():
                  "file:///flink-sql-connector-elasticsearch7-3.0.1-1.17.jar")
 
     deserialization_schema = JsonRowDeserializationSchema.builder() \
-        .type_info(type_info=Types.ROW_NAMED(field_names=["to","from","message"],
-                                             field_types=[Types.STRING(), Types.STRING(), Types.STRING()])).build()
+        .type_info(type_info=Types.ROW_NAMED(field_names=["to","from","message","time_sent"],
+                                             field_types=[Types.STRING(), Types.STRING(), Types.STRING(), Types.STRING()])).build()
 
     kafka_consumer = FlinkKafkaConsumer(
         topics='mails',
@@ -66,13 +73,13 @@ def setup():
 
     # summarization
     summaries = ds.map(SummaryMap(),
-                        output_type=Types.ROW_NAMED(field_names=["to","from","message","summary"],
-                                                     field_types=[Types.STRING(), Types.STRING(),Types.STRING(), Types.STRING()]))
+                        output_type=Types.ROW_NAMED(field_names=["to","from","message","time_sent","summary","polarity","subjectivity"],
+                                                     field_types=[Types.STRING(), Types.STRING(),Types.STRING(),Types.STRING(), Types.STRING(),Types.FLOAT(),Types.FLOAT()]))
     # summaries = ds.map(SummaryMap(), output_type=Types.STRING())
 
     serialization_schema = JsonRowSerializationSchema.builder().with_type_info(
-                        type_info=Types.ROW_NAMED(field_names=["to","from","message","summary"],
-                                                  field_types=[Types.STRING(), Types.STRING(),Types.STRING(), Types.STRING()])).build()
+                        type_info=Types.ROW_NAMED(field_names=["to","from","message","time_sent","summary","polarity","subjectivity"],
+                                                  field_types=[Types.STRING(), Types.STRING(),Types.STRING(),Types.STRING(), Types.STRING(),Types.FLOAT(),Types.FLOAT()])).build()
         
 
     kafka_producer = FlinkKafkaProducer(

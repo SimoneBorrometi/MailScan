@@ -5,7 +5,7 @@ services:
     image: stalwartlabs/mail-server:latest
     ports: 
       - "443:443"
-      - "7070:8080"
+      - "8080:8080"
       - "25:25"
       - "587:587" 
       - "465:465"
@@ -15,6 +15,8 @@ services:
     networks:
       net:
         ipv4_address: 172.16.0.5
+    tty: true
+    stdin_open: true
     volumes:
       - type: bind
         source: ./stalwart-mail
@@ -128,6 +130,7 @@ services:
     environment:
       - discovery.type=single-node
 
+<<<<<<< HEAD
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.17.23
@@ -141,6 +144,29 @@ services:
       # - ELASTICSEARCH_HOSTS=http://es01:9200
     volumes:
       - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+=======
+  grafana:
+    image: grafana/grafana-enterprise
+    networks:
+      - net
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:7.17.23
+  #   networks:
+  #     - net
+  #   ports:
+  #     - 5601:5601
+  #   depends_on:
+  #     - elasticsearch
+  #   # environment:
+  #     # - ELASTICSEARCH_HOSTS=http://es01:9200
+  #   volumes:
+  #     - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+>>>>>>> cf2e5b4 (Added grafana and elasticsearch; polarity and subjectivity calculation)
 
     # volumes:
       # - .kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
@@ -148,7 +174,7 @@ services:
   redpanda:
     image: docker.redpanda.com/redpandadata/console:latest
     ports: 
-      - 8080:8080
+      - 6060:8080
     networks:
       - net
     environment:
@@ -166,3 +192,6 @@ secrets:
     file: ./secrets/user-password
   logstash_keystore_pass:
     file: ./secrets/logstash-keystore
+
+volumes:
+  grafana-storage: {}
