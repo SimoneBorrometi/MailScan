@@ -14,17 +14,21 @@ Web uis
 ## Setup
 ### Mailserver testing
 
-Just for testing purposes
+Get [stalwart-cli](https://github.com/stalwartlabs/mail-server/releases/tag/v0.8.1)
+
+'''
+mkdir stalwart-mail
+'''
+
+Run docker
 The first time stalwart is run, it will print the admin password, save it
 
-Set hostname to 'localhost' via web UI
+###### Via web UI
+Set hostname to 'localhost' and allow IMAP plain text auth
 
-Get stalwart-cli 
-```
-wget https://github.com/stalwartlabs/mail-server/releases/tag/v0.8.1
-```
+###### Via CLI
 
-Crea dominio e utente 
+Create domain and user 
 ```
 stalwart-cli -u https://localhost domain create 'example.org'
 
@@ -33,7 +37,7 @@ stalwart-cli -u https://localhost account create -d "John Snow" -i false -a "joh
 stalwart-cli -u https://localhost import messages -f mbox john /path/to/file.mbox
 ```
 ### Logstash
-Create dir secrets.
+Create directory secrets
 Create file secrets/logstash-kewystore and secrets/user-passowrd and fill them.
 
 ### Flink 
@@ -46,4 +50,3 @@ wget https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-k
 
 ### Grafana
 Import the dashboard configurations from ./grafana via web ui, manually configure the elasticsearch source (just the url)
-

@@ -20,7 +20,6 @@ RUN python -m spacy download it_core_news_md
 
 # COPY apache-flink*.tar.gz /
 COPY ./flink-sql-connector-kafka-1.17.2.jar /
-COPY ./flink-sql-connector-elasticsearch7-3.0.1-1.17.jar /
 
 COPY ./summarizer.py /
 
