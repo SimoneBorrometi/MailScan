@@ -11,12 +11,12 @@ Web uis
 - [Grafana](http://localhost:3000)
 - [Flink UI](http://localhost:8081) (*IF* run in session or application mode)
 
+## Setup
 ### Mailserver testing
 
 Just for testing purposes
 The first time stalwart is run, it will print the admin password, save it
 
-#### Only once
 Set hostname to 'localhost' via web UI
 
 Get stalwart-cli 
@@ -32,8 +32,11 @@ stalwart-cli -u https://localhost account create -d "John Snow" -i false -a "joh
 
 stalwart-cli -u https://localhost import messages -f mbox john /path/to/file.mbox
 ```
+### Logstash
+Create dir secrets.
+Create file secrets/logstash-kewystore and secrets/user-passowrd and fill them.
 
-### Flink setup
+### Flink 
 Download the kafka connector
 ```
 cd flink/pyflink/
