@@ -16,15 +16,26 @@ Web uis
 
 Get [stalwart-cli](https://github.com/stalwartlabs/mail-server/releases/tag/v0.8.1)
 
+<<<<<<< HEAD
 '''
 mkdir stalwart-mail
 '''
+=======
+
+```
+mkdir stalwart-mail
+```
+>>>>>>> 1e42363 (fixed the fix)
 
 Run docker
 The first time stalwart is run, it will print the admin password, save it
 
 ###### Via web UI
+<<<<<<< HEAD
 Set hostname to 'localhost' and allow IMAP plain text auth
+=======
+Set hostname to 'localhost' and allow IMAP plain text auth then reload
+>>>>>>> 1e42363 (fixed the fix)
 
 ###### Via CLI
 
