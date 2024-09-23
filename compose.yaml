@@ -55,24 +55,13 @@ services:
     depends_on: 
       - broker
     networks:
-      net:
-        ipv4_address: 172.16.0.7
+      - net
 
-#  kafka-reader:
-#    image: apache/kafka:latest
-#    command: /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server broker:9092 --topic mails
-#    depends_on:
-#      kafka-topics:
-#        condition: service_completed_successfully
-#    networks:
-#      net:
-#        ipv4_address: 172.16.0.8
 
   logstash:
     build: ./logstash
     networks:
-      net:
-        ipv4_address: 172.16.0.9
+      - net
     stdin_open: true
     tty: true
     environment:
@@ -85,39 +74,52 @@ services:
       kafka-topics:
         condition: service_completed_successfully
 
-  # flink-jobmanager:
-  #   image: flink:latest
-  #   ports:
-  #     - 8081:8081
-  #   networks:
-  #     - net
-  #   hostname: jobmanager
-  #   environment:
-  #     FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
-  #   command: standalone-job --job-classname org.dmi.mailscanner.DataStreamJob
-  #   volumes:
-  #     - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlib
-
-  # flink-taskmanager:
-  #   image: flink:latest
-  #   networks:
-  #     - net
-  #   environment:
-  #     FLINK_PROPERTIES: 'jobmanager.rpc.address: jobmanager'
-  #   depends_on:
-  #     - flink-jobmanager
-  #   command: taskmanager
-  #   volumes:
-  #     - /home/simoneb/Work/tap/project/flink/mailscanner/target:/opt/flink/usrlibs
-
   pyflink:
     build: ./flink/pyflink
     networks:
       - net
     ports:
       - 8081:8081
+    hostname: jobmanager
+    entrypoint: [ "python", "/summarizer.py"]
+    environment:
+       - |
+        FLINK_PROPERTIES:
+        jobmanager.rpc.address: jobmanager
+        rest.port: 8081
+        rest.address: localhost
+        rest.bind-address: 0.0.0.0
     depends_on:
       - elasticsearch
+
+  # jobmanager:
+  #   build: ./flink/pyflink
+  #   hostname: "jobmanager"
+  #   expose:
+  #     - "6123"
+  #   ports:
+  #     - "9090:8081"
+  #   command: jobmanager
+  #   environment:
+  #     - JOB_MANAGER_RPC_ADDRESS=jobmanager
+  #   networks:
+  #     - net
+
+  # taskmanager:
+  #   build: ./flink/pyflink
+  #   expose:
+  #     - "6121"
+  #     - "6122"
+  #   depends_on:
+  #     - jobmanager
+  #   command: taskmanager
+  #   links:
+  #     - jobmanager:jobmanager
+  #   environment:
+  #     - JOB_MANAGER_RPC_ADDRESS=jobmanager
+  #     - TASK_MANAGER_NUMBER_OF_TASK_SLOTS=2
+  #   networks:
+  #     - net
     
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.23 
@@ -130,21 +132,6 @@ services:
     environment:
       - discovery.type=single-node
 
-<<<<<<< HEAD
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.17.23
-    networks:
-      - net
-    ports:
-      - 5601:5601
-    depends_on:
-      - elasticsearch
-    # environment:
-      # - ELASTICSEARCH_HOSTS=http://es01:9200
-    volumes:
-      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-=======
   grafana:
     image: grafana/grafana-enterprise
     networks:
@@ -153,23 +140,10 @@ services:
       - 3000:3000
     volumes:
       - grafana-storage:/var/lib/grafana
+      - type: bind
+        source: ./grafana/elastic.yaml
+        target: /usr/share/grafana/provisioning/datasources/elastic.yaml
 
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana:7.17.23
-  #   networks:
-  #     - net
-  #   ports:
-  #     - 5601:5601
-  #   depends_on:
-  #     - elasticsearch
-  #   # environment:
-  #     # - ELASTICSEARCH_HOSTS=http://es01:9200
-  #   volumes:
-  #     - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
->>>>>>> cf2e5b4 (Added grafana and elasticsearch; polarity and subjectivity calculation)
-
-    # volumes:
-      # - .kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
 
   redpanda:
     image: docker.redpanda.com/redpandadata/console:latest

@@ -1,11 +1,6 @@
 - pipeline.id: imap
   path.config: "/usr/share/logstash/pipeline/imap.conf"
   # pipeline.workers: 1
-<<<<<<< HEAD
-- pipeline.id: elastic
-  path.config: "/usr/share/logstash/pipeline/elastic.conf"
-=======
 - pipeline.id: kafka_in
   path.config: "/usr/share/logstash/pipeline/kafka_input.conf"
->>>>>>> cf2e5b4 (Added grafana and elasticsearch; polarity and subjectivity calculation)
   # queue.type: persisted
